@@ -2,7 +2,7 @@
 using System;
 using Xunit;
 
-namespace NetCoreBalanceManager.Tests.Tests
+namespace NetCoreBalanceManager.UnitTests.Tests
 {
     public class GameTransactionTests : TestsBase
     {

@@ -16,18 +16,20 @@ namespace NetCoreBalanceManagerApi.Controllers
     [ApiController]
     public class WithdrawController : ControllerBase
     {
-        #region Private fields
-        private readonly IBalanceManager _balanceManager;
+        #region Private Fields
+        private readonly CasinoBalanceManager _casinoBalanceManager;
         private readonly GameBalanceManager _gameBalanceManager;
         private readonly ILogger<WithdrawController> _logger;
+
         #endregion
 
         #region Constructors
-        public WithdrawController(CasinoBalanceManager casinoBalanceManager, 
-            ILogger<WithdrawController> logger)
+        public WithdrawController(CasinoBalanceManager casinoBalanceManager,
+                 GameBalanceManager gameBalanceManager,
+                 ILogger<WithdrawController> logger)
         {
-            _balanceManager = casinoBalanceManager;
-
+            _gameBalanceManager = gameBalanceManager;
+            _casinoBalanceManager = casinoBalanceManager;
             _logger = logger;
         }
         #endregion
@@ -35,35 +37,13 @@ namespace NetCoreBalanceManagerApi.Controllers
         #region Api Methods
         [HttpPost]
         [Route("{transactionId}/{amount:decimal}")]
-        public ActionResult<ErrorModel> DecreaseBalance(decimal amount, string transactionId)
+        public ActionResult<ErrorModel> Withdraw(decimal amount, string transactionId)
         {
             _logger.LogInformation($"Withdraw/{transactionId}/{amount} was called");
 
-            ErrorCode decreaseBalanceResult = _balanceManager.DecreaseBalance(amount, transactionId);
-            ErrorModel errorResult = new ErrorModel();
-
-            try
-            {
-                if (decreaseBalanceResult == ErrorCode.Success)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    errorResult.ErrorCode = decreaseBalanceResult.ToString();
-                    errorResult.ErrorDescription = decreaseBalanceResult.GetErrorDescription();
-
-                    return BadRequest(errorResult);
-                }
-            }
-            catch (Exception ex)
-            {
-                errorResult.ErrorCode = ErrorCode.UnknownError.ToString();
-                errorResult.ErrorDescription = ErrorCode.UnknownError.GetErrorDescription();
-                _logger.LogError($"Error executing Deposit/{transactionId}/{amount}: {ex.Message}");
-                return BadRequest(ErrorCode.UnknownError);
-            }
+            return null;
         }
+
         #endregion
     }
 }

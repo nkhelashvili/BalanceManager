@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace NetCoreBalanceManager.Tests.Tests
+namespace NetCoreBalanceManager.UnitTests.Tests
 {
     public class CasinoTransactionTests : TestsBase
     {

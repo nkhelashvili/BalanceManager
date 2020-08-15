@@ -5,31 +5,32 @@ using Moq;
 using NetCoreBalanceManagerApi.Controllers;
 using NetCoreBalanceManagerApi.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Text;
 using Xunit;
 
 namespace NetCoreBalanceManager.UnitTests.Tests
 {
-    public class DepositTests : TestsBase
+    public class WithdrawTests : TestsBase
     {
-        private Mock<ILogger<DepositController>> _logger;
-        private DepositController _depositController;
+        private Mock<ILogger<WithdrawController>> _logger;
+        private WithdrawController _withdrawController;
 
-        public DepositTests() : base()
+        public WithdrawTests() : base()
         {
-            _logger = new Mock<ILogger<DepositController>>();
-            _depositController = new DepositController(
+            _logger = new Mock<ILogger<WithdrawController>>();
+            _withdrawController = new WithdrawController(
                 _casinoBalanceManager,
                 _gameBalanceManager,
                 _logger.Object);
         }
 
-
         [InlineData(-500)]
         [InlineData(1000)]
         [InlineData(2000)]
-        [InlineData(1000000)]
+        [InlineData(1000000)]        
         [Theory]
-        public void DepositTests_Deposit_Test(decimal amount)
+        public void WithdrawTests_Withdraw_Test(decimal amount)
         {
             string transactionId = Guid.NewGuid().ToString();
 
@@ -45,7 +46,7 @@ namespace NetCoreBalanceManager.UnitTests.Tests
             Assert.True(gameBalanceStart > 0);
             Assert.True(casinoBalanceStart > 0);
 
-            var depositFundsResult = _depositController.DepositFunds(amount, transactionId);
+            var depositFundsResult = _withdrawController.Withdraw(amount, transactionId);
 
             decimal gameBalanceEnd = _gameBalanceManager.GetBalance();
             decimal casinoBalanceEnd = _casinoBalanceManager.GetBalance();
@@ -57,7 +58,7 @@ namespace NetCoreBalanceManager.UnitTests.Tests
 
                 BadRequestObjectResult depositFundsErrorResult = Assert.IsType<BadRequestObjectResult>(depositFundsResult);
                 var errorResultValue = Assert.IsType<ErrorModel>((ErrorModel)depositFundsErrorResult.Value);
-                
+
                 Assert.Equal(ErrorCode.NotEnoughtBalance.ToString(), errorResultValue.ErrorCode);
             }
             else if (amount <= 0)
@@ -72,8 +73,8 @@ namespace NetCoreBalanceManager.UnitTests.Tests
             }
             else
             {
-                Assert.Equal(gameBalanceStart - amount, gameBalanceEnd);
-                Assert.Equal(casinoBalanceStart + amount, casinoBalanceEnd);
+                Assert.Equal(gameBalanceStart + amount, gameBalanceEnd);
+                Assert.Equal(casinoBalanceStart - amount, casinoBalanceEnd);
 
                 Assert.IsType<OkResult>(depositFundsResult);
             }

@@ -1,15 +1,11 @@
-using Balances;
-using Castle.Core.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NetCoreBalanceManager.Tests.Tests;
 using NetCoreBalanceManagerApi.Controllers;
 using System;
-using System.Diagnostics;
 using Xunit;
 
-namespace NetCoreBalanceManager.Tests
+namespace NetCoreBalanceManager.UnitTests.Tests
 {
     public class BalanceTests : TestsBase
     {
@@ -30,7 +26,6 @@ namespace NetCoreBalanceManager.Tests
         {
             var getBalanceActionResult = _balanceController.GetBalance();
             decimal casinoBalanceValue = _casinoBalanceManager.GetBalance();
-            decimal gamebalanceValue = _gameBalanceManager.GetBalance();
 
             ActionResult<decimal> getBalanceResut = Assert.IsType<ActionResult<decimal>>(getBalanceActionResult);
             Assert.IsType<OkObjectResult>(getBalanceResut.Result);

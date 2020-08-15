@@ -1,6 +1,6 @@
 ﻿using Balances;
 
-namespace NetCoreBalanceManager.Tests.Tests
+namespace NetCoreBalanceManager.UnitTests.Tests
 {
     public class TestsBase
     {
