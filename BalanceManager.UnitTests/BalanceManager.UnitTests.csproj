@@ -17,12 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NetCoreBalanceManagerApi\NetCoreBalanceManagerApi.csproj" />
+    <ProjectReference Include="..\BalanceManagerApi\BalanceManagerApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="BalanceManager">
-      <HintPath>..\NetCoreBalanceManagerApi\Library\BalanceManager.dll</HintPath>
+      <HintPath>..\BalanceManagerApi\Library\BalanceManager.dll</HintPath>
     </Reference>
   </ItemGroup>
 

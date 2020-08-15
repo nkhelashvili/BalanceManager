@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace NetCoreBalanceManagerApi.Controllers
+namespace BalanceManagerApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

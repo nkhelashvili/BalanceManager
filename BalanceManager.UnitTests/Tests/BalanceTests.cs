@@ -1,17 +1,20 @@
+using BalanceManagerApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NetCoreBalanceManagerApi.Controllers;
 using System;
 using Xunit;
 
-namespace NetCoreBalanceManager.UnitTests.Tests
+namespace BalanceManager.UnitTests.Tests
 {
     public class BalanceTests : TestsBase
     {
+        #region Private Fields
         private Mock<ILogger<BalanceController>> _logger;
         private BalanceController _balanceController;
+        #endregion
 
+        #region Contructors
         public BalanceTests() : base()
         {
             _logger = new Mock<ILogger<BalanceController>>();
@@ -20,7 +23,9 @@ namespace NetCoreBalanceManager.UnitTests.Tests
                 _gameBalanceManager,
                 _logger.Object);
         }
+        #endregion
 
+        #region Tests
         [Fact]
         public void Test_1_StartBalance()
         {
@@ -82,5 +87,6 @@ namespace NetCoreBalanceManager.UnitTests.Tests
 
             Assert.Equal(gameExpectedBalance, gameActualBalance);
         }
+        #endregion
     }
 }

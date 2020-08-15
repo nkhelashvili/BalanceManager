@@ -1,11 +1,11 @@
 ﻿using Balances;
-using NetCoreBalanceManagerApi.Constants;
+using BalanceManagerApi.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NetCoreBalanceManagerApi.Extensions
+namespace BalanceManagerApi.Extensions
 {
     public static class ErrorCodeExtensions
     {

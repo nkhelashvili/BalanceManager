@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace NetCoreBalanceManager.UnitTests.Tests
+namespace BalanceManager.UnitTests.Tests
 {
     public class CasinoTransactionTests : TestsBase
     {
+        #region Constructors
         public CasinoTransactionTests() : base()
         {
             _balanceManager = _casinoBalanceManager;
         }
+        #endregion
 
+        #region Tests
         [Fact]
         public void CasinoTransactionTests_1_Check_Casino_IncreaseBalance_PipeLine()
         {
@@ -107,5 +110,6 @@ namespace NetCoreBalanceManager.UnitTests.Tests
             decimal endBalance = _balanceManager.GetBalance();
             Assert.Equal(startBalance, endBalance);
         }
+        #endregion
     }
 }

@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>BalanceManagerApi</AssemblyName>
+    <RootNamespace>BalanceManagerApi</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,15 +2,18 @@
 using System;
 using Xunit;
 
-namespace NetCoreBalanceManager.UnitTests.Tests
+namespace BalanceManager.UnitTests.Tests
 {
     public class GameTransactionTests : TestsBase
     {
+        #region Constructors
         public GameTransactionTests()
         {
             _balanceManager = _gameBalanceManager;
         }
+        #endregion
 
+        #region Tests
         [Fact]
         public void GameTransactionTests_1_Game_IncreaseBalance_PipeLine()
         {
@@ -105,5 +108,6 @@ namespace NetCoreBalanceManager.UnitTests.Tests
             decimal endBalance = _balanceManager.GetBalance();
             Assert.Equal(startBalance, endBalance);
         }
+        #endregion
     }
 }

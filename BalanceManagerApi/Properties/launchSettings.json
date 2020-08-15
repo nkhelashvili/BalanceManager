@@ -18,7 +18,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "NetCoreBalanceManagerApi": {
+    "BalanceManagerApi": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

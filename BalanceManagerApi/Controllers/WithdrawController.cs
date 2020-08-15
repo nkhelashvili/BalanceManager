@@ -6,11 +6,11 @@ using Balances;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NetCoreBalanceManagerApi.Constants;
-using NetCoreBalanceManagerApi.Extensions;
-using NetCoreBalanceManagerApi.ViewModels;
+using BalanceManagerApi.Constants;
+using BalanceManagerApi.Extensions;
+using BalanceManagerApi.ViewModels;
 
-namespace NetCoreBalanceManagerApi.Controllers
+namespace BalanceManagerApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,36 +1,39 @@
-﻿using Balances;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NetCoreBalanceManagerApi.Controllers;
-using NetCoreBalanceManagerApi.ViewModels;
+using BalanceManagerApi.Controllers;
+using BalanceManagerApi.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
+using Balances;
 
-namespace NetCoreBalanceManager.UnitTests.Tests
+namespace BalanceManager.UnitTests.Tests
 {
-    public class WithdrawTests : TestsBase
+    public class DepositTests : TestsBase
     {
-        private Mock<ILogger<WithdrawController>> _logger;
-        private WithdrawController _withdrawController;
+        #region Private Fields
+        private Mock<ILogger<DepositController>> _logger;
+        private DepositController _depositController;
+        #endregion
 
-        public WithdrawTests() : base()
+        #region Constructors
+        public DepositTests() : base()
         {
-            _logger = new Mock<ILogger<WithdrawController>>();
-            _withdrawController = new WithdrawController(
+            _logger = new Mock<ILogger<DepositController>>();
+            _depositController = new DepositController(
                 _casinoBalanceManager,
                 _gameBalanceManager,
                 _logger.Object);
         }
+        #endregion
 
+        #region Tests
         [InlineData(-500)]
         [InlineData(1000)]
         [InlineData(2000)]
-        [InlineData(1000000)]        
+        [InlineData(1000000)]
         [Theory]
-        public void WithdrawTests_Withdraw_Test(decimal amount)
+        public void DepositTests_Deposit_Test(decimal amount)
         {
             string transactionId = Guid.NewGuid().ToString();
 
@@ -46,7 +49,7 @@ namespace NetCoreBalanceManager.UnitTests.Tests
             Assert.True(gameBalanceStart > 0);
             Assert.True(casinoBalanceStart > 0);
 
-            var depositFundsResult = _withdrawController.Withdraw(amount, transactionId);
+            var depositFundsResult = _depositController.DepositFunds(amount, transactionId);
 
             decimal gameBalanceEnd = _gameBalanceManager.GetBalance();
             decimal casinoBalanceEnd = _casinoBalanceManager.GetBalance();
@@ -73,11 +76,12 @@ namespace NetCoreBalanceManager.UnitTests.Tests
             }
             else
             {
-                Assert.Equal(gameBalanceStart + amount, gameBalanceEnd);
-                Assert.Equal(casinoBalanceStart - amount, casinoBalanceEnd);
+                Assert.Equal(gameBalanceStart - amount, gameBalanceEnd);
+                Assert.Equal(casinoBalanceStart + amount, casinoBalanceEnd);
 
                 Assert.IsType<OkResult>(depositFundsResult);
             }
         }
+        #endregion
     }
 }
