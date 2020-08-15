@@ -76,7 +76,7 @@ namespace NetCoreBalanceManagerApi.Controllers
 
             if (casinoIncreaseBalanceResult != ErrorCode.Success)
             {
-                casinoIncreaseBalanceResult = _casinoBalanceManager.Rollback(transactionId);
+                casinoIncreaseBalanceResult = _gameBalanceManager.Rollback(transactionId);
 
                 if (casinoIncreaseBalanceResult == ErrorCode.Success)
                 {

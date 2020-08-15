@@ -35,13 +35,84 @@ namespace NetCoreBalanceManagerApi.Controllers
         #endregion
 
         #region Api Methods
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost]
         [Route("{transactionId}/{amount:decimal}")]
-        public ActionResult<ErrorModel> Withdraw(decimal amount, string transactionId)
+        public IActionResult Withdraw(decimal amount, string transactionId)
         {
             _logger.LogInformation($"Withdraw/{transactionId}/{amount} was called");
 
-            return null;
+            ErrorModel errorResult = new ErrorModel();
+
+            if (amount <= 0)
+            {
+                errorResult.ErrorCode = "NegativeOrZeroValue";
+                errorResult.ErrorDescription = "უარყოფითი ან ნულოვანი მნიშვნელობის გადაცემა არაა დაშვებული";
+
+                return BadRequest(errorResult);
+            }
+
+            ErrorCode casinoDecreaseBalanceResult = _casinoBalanceManager.DecreaseBalance(amount, transactionId);
+
+            try
+            {
+                if (casinoDecreaseBalanceResult != ErrorCode.Success)
+                {
+                    errorResult.ErrorCode = casinoDecreaseBalanceResult.ToString();
+                    errorResult.ErrorDescription = casinoDecreaseBalanceResult.GetErrorDescription() + $" (CasinoBalance)";
+
+                    return BadRequest(errorResult);
+                }
+            }
+            catch (Exception ex)
+            {
+                errorResult.ErrorCode = ErrorCode.UnknownError.ToString();
+                errorResult.ErrorDescription = ErrorCode.UnknownError.GetErrorDescription();
+                _logger.LogError($"Error executing Withdraw/{transactionId}/{amount}: {ex.Message}");
+                return BadRequest(ErrorCode.UnknownError);
+            }
+
+            ErrorCode gameIncreaseBalanceResult = _gameBalanceManager.IncreaseBalance(amount, transactionId);
+
+            if (gameIncreaseBalanceResult != ErrorCode.Success)
+            {
+                gameIncreaseBalanceResult = _casinoBalanceManager.Rollback(transactionId);
+
+                if (gameIncreaseBalanceResult == ErrorCode.Success)
+                {
+                    gameIncreaseBalanceResult = ErrorCode.TransactionRollbacked;
+                }
+            }
+
+            try
+            {
+                if (casinoDecreaseBalanceResult != ErrorCode.Success)
+                {
+                    errorResult.ErrorCode = gameIncreaseBalanceResult.ToString();
+                    if (gameIncreaseBalanceResult == ErrorCode.TransactionRollbacked)
+                    {
+                        errorResult.ErrorDescription = gameIncreaseBalanceResult.GetErrorDescription() + $" (GameBalance)";
+                    }
+                    else
+                    {
+                        errorResult.ErrorDescription = gameIncreaseBalanceResult.GetErrorDescription() + $" (CasinoBalance)";
+                    }
+
+                    return BadRequest(errorResult);
+                }
+                else
+                {
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                errorResult.ErrorCode = ErrorCode.UnknownError.ToString();
+                errorResult.ErrorDescription = ErrorCode.UnknownError.GetErrorDescription();
+                _logger.LogError($"Error executing Withdraw/{transactionId}/{amount}: {ex.Message}");
+                return BadRequest(ErrorCode.UnknownError);
+            }
         }
 
         #endregion
